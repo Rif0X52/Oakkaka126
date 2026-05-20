@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.gitignore
+*.log
+data/
+.DS_Store
+server/public
+artifacts/
+.local/
+.agents/
+Oakkakakaoakak123/
+attached_assets/
