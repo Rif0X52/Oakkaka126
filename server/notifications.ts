@@ -2,8 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import https from 'https';
 import type { RequestOptions } from 'node-telegram-bot-api';
 import { log } from './vite';
-
-const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
+import { BOT_TOKEN } from './bot-shared';
 const ADMIN_ID = '5286005736'; // Admin Telegram ID
 
 const httpsAgent = new https.Agent({ keepAlive: true, keepAliveMsecs: 10000, maxSockets: 2 });

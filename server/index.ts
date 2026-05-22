@@ -115,21 +115,13 @@ app.post("/bot-webhook", express.json(), (req, res) => {
     log(`Auto-detected HF Space host: ${webhookUrl}`);
   }
 
-  // Check TELEGRAM_BOT_TOKEN
-  const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  if (!botToken) {
-    log("WARNING: TELEGRAM_BOT_TOKEN is not set. Bot will not receive messages.");
-  } else {
-    log("TELEGRAM_BOT_TOKEN is present.");
-  }
-
   // Set webhook directly via Telegram API (bypasses node-telegram-bot-api TLS issues)
-  if (webhookUrl && botToken) {
+  if (webhookUrl && BOT_TOKEN) {
     const fullWebhookUrl = `${webhookUrl}/bot-webhook`;
     let success = false;
     for (let i = 0; i < 5; i++) {
       try {
-        const result = await tgFetch(botToken, "setWebhook", { url: fullWebhookUrl });
+        const result = await tgFetch(BOT_TOKEN, "setWebhook", { url: fullWebhookUrl });
         if (result?.ok) {
           log(`Webhook set to: ${fullWebhookUrl}`);
           success = true;
