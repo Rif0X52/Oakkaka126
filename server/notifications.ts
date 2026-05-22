@@ -1,5 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import https from 'https';
+import type { RequestOptions } from 'node-telegram-bot-api';
 import { log } from './vite';
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
@@ -9,7 +10,7 @@ const httpsAgent = new https.Agent({ keepAlive: true, keepAliveMsecs: 10000, max
 
 // Create bot instance for notifications
 const notificationBot = new TelegramBot(BOT_TOKEN, {
-  request: { agent: httpsAgent, timeout: 30000, forever: true }
+  request: { agent: httpsAgent, timeout: 30000, forever: true } as RequestOptions
 });
 
 // Admin notification functions

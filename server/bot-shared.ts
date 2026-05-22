@@ -1,5 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import https from 'https';
+import type { RequestOptions } from 'node-telegram-bot-api';
 import { log } from './vite';
 
 export const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
@@ -21,7 +22,7 @@ export const requestOptions = {
   agent: httpsAgent,
   timeout: 30000,
   forever: true,
-};
+} as RequestOptions;
 
 export function safeParseInt(value: string | null | undefined, defaultValue: number = 0): number {
   if (!value) return defaultValue;

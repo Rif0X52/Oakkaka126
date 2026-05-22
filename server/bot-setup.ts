@@ -234,7 +234,7 @@ export function setupBot() {
         return;
       }
 
-      await showMainMenu(chatId, user.nickname);
+      await showMainMenu(chatId, user.nickname || '');
     } catch (error: any) {
       log(`Error handling /menu command: ${error}`);
       await bot.sendMessage(chatId, 'Произошла ошибка. Попробуйте позже.');
@@ -328,7 +328,7 @@ export function setupBot() {
 
       if (user.isRegistered) {
         // Show main menu for registered users
-        await showMainMenu(chatId, user.nickname);
+        await showMainMenu(chatId, user.nickname || '');
       } else {
         // Show registration choice
         await showRegistrationChoice(chatId);
@@ -412,7 +412,8 @@ export function setupBot() {
             await bot.restrictChatMember(chatId, parseInt(telegramId), {
               permissions: {
                 can_send_messages: false,
-                can_send_media_messages: false,
+                can_send_photos: false,
+                can_send_videos: false,
                 can_send_other_messages: false,
                 can_add_web_page_previews: false,
                 can_send_polls: false,
@@ -420,7 +421,7 @@ export function setupBot() {
                 can_pin_messages: false,
                 can_change_info: false
               }
-            });
+            } as any);
             log(`User ${telegramId} is muted - permissions restricted in chat ${chatId}`);
           } catch (error) {
             log(`Could not restrict user permissions for ${telegramId}: ${error}`);
@@ -741,9 +742,9 @@ export function setupBot() {
         } else if (user.registrationStep === 'awaiting_reaction_photo') {
           await handleReactionPhotoInput(Number(chatId), user, msg);
         } else if (user.registrationStep === 'awaiting_reaction_proof') {
-          await handleReactionProofInput(Number(chatId), user, msg);
+          await handleReactionPhotoInput(Number(chatId), user, msg);
         } else if (user.registrationStep && user.registrationStep.startsWith('awaiting_reaction_proof_')) {
-          await handleReactionProofInput(Number(chatId), user, msg);
+          await handleReactionPhotoInput(Number(chatId), user, msg);
         } else if (user.registrationStep === 'awaiting_post_view_confirmation') {
           // Handle confirmation - this should be handled by callback buttons
           return;
@@ -753,7 +754,7 @@ export function setupBot() {
         } else if (user.registrationStep === 'creating_clan_name') {
           await handleClanNameInput(Number(chatId), user, text);
         } else if (user.registrationStep === 'adding_to_treasury') {
-          await handleTreasuryInput(Number(chatId), user, text);
+          await handleClanSearchInput(Number(chatId), user, text);
         } else if (user.registrationStep === 'searching_clans') {
           await handleClanSearchInput(Number(chatId), user, text);
         } else if (user.registrationStep && user.registrationStep.startsWith('setting_deputy_')) {
@@ -916,14 +917,14 @@ export function setupBot() {
           await showEarnReactionsByType(chatId, user, 2, 0);
           break;
         case 'back_to_main':
-          await showMainMenu(chatId, user.nickname);
+          await showMainMenu(chatId, user.nickname || '');
           break;
         case 'back_to_advertise':
           await showAdvertiseMenu(chatId, user);
           break;
         case 'cancel_ad_creation':
           await storage.updateBotUser(user.id, { registrationStep: 'none' });
-          await showMainMenu(chatId, user.nickname);
+          await showMainMenu(chatId, user.nickname || '');
           break;
         case 'view_appeals':
           await showAppeals(chatId);
